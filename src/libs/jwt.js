@@ -1,8 +1,8 @@
 import { TOKEN_SECRET } from "../config.js"
 import jwt from 'jsonwebtoken'
 
-export async function createToken(payload){
-    new Promise((resolve, reject) => {
+export function createToken(payload){
+    return new Promise((resolve, reject) => {
         jwt.sign(
             payload,
             TOKEN_SECRET, {
