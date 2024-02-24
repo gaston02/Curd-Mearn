@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 function LoginPage() {
   const {
@@ -7,14 +8,19 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { sigin } = useAuth();
+  const { signin, errors: signinErrors } = useAuth();
   const onSubmit = handleSubmit((data) => {
-    sigin(data);
+    signin(data);
   });
 
   return (
     <div className="flex h-[calc(100vh-100px)] items-center justify-center">
       <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+        {signinErrors.map((error, i) => (
+          <div className="bg-red-500 p-2 text-white" key={i}>
+            {error}
+          </div>
+        ))}
         <h1 className="text-2xl font-bold">Login</h1>
         <form onSubmit={onSubmit}>
           <input
@@ -35,6 +41,9 @@ function LoginPage() {
           )}
           <button type="submit">Login</button>
         </form>
+        <p className="flex gap-x-2 justify-between">
+          Dont have an account? <Link to="/register" className="text-sky-500">Signup</Link>
+        </p>
       </div>
     </div>
   );
