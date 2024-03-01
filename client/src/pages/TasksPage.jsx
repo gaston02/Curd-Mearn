@@ -1,12 +1,22 @@
-import { useAuth } from "../context/AuthContext"
+import { useEffect } from "react";
+import { useTasks } from "../context/TaskContext";
+import TaskCard from "../components/TaskCard"
 
-function TasksPage(){
-    const {user} = useAuth();
-    console.log(user);
+function TasksPage() {
+  const { getTasks, tasks } = useTasks();
+  useEffect(() => {
+    getTasks();
+  }, []);
 
-    return (
-        <div>TasksPage</div>
-    )
+  if(tasks.length===0) return (<h1>No tasks found</h1>);
+
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {tasks.map((task) => (
+        <TaskCard task={task} key={task._id} />
+      ))}
+    </div>
+  );
 }
 
-export default TasksPage
+export default TasksPage;

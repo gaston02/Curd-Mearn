@@ -43,6 +43,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logout = () => {
+    Cookies.remove("token");
+    setIsAuthenticated(false);
+    setUser(null);
+  };
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -60,29 +66,29 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return setUser(false);
       }
-        try {
-          const res = await verifyTokenRquest(cookies.token);
-          console.log(res);
-          if (!res.data) {
-            setIsAuthenticated(false);
-            setLoading(false);
-            return;
-          }
-          setIsAuthenticated(true);
-          setUser(res.data);
-          setLoading(false);
-        } catch (error) {
+      try {
+        const res = await verifyTokenRquest(cookies.token);
+        console.log(res);
+        if (!res.data) {
           setIsAuthenticated(false);
-          setUser(null);
           setLoading(false);
+          return;
         }
+        setIsAuthenticated(true);
+        setUser(res.data);
+        setLoading(false);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setUser(null);
+        setLoading(false);
+      }
     }
     checkLogin();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ signup, signin, user, isAuthenticated, errors, loading }}
+      value={{ signup, signin, logout, user, isAuthenticated, errors, loading }}
     >
       {children}
     </AuthContext.Provider>
